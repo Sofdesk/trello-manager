@@ -1,12 +1,15 @@
 
-import { ADD_LIST, ADD_CARD } from '../actions';
+import { combineReducers } from 'redux';
+import update from 'react-addons-update';
+
+import { ADD_LISTS, ADD_CARDS, ADD_LABELS, OPEN_POPUP, CLOSE_POPUP, ADD_LABEL, REMOVE_LABEL } from '../actions';
 
 export function lists(state = [], action) {
 	switch (action.type) {
-		case ADD_LIST:
+		case ADD_LISTS:
 			return [
 				...state,
-				action.list,
+				...action.lists,
 			];
 		default:
 			return state;
@@ -15,10 +18,22 @@ export function lists(state = [], action) {
 
 export function cards(state = [], action) {
 	switch (action.type) {
-		case ADD_CARD:
+		case ADD_CARDS:
 			return [
 				...state,
-				action.card,
+				...action.cards,
+			];
+		default:
+			return state;
+	}
+};
+
+export function labels(state = [], action) {
+	switch (action.type) {
+		case ADD_LABELS:
+			return [
+				...state,
+				...action.labels,
 			];
 		default:
 			return state;
@@ -27,32 +42,110 @@ export function cards(state = [], action) {
 
 const cardsByList = (state = {}, action) => {
 	switch (action.type) {
-		case ADD_CARD:
-			const card = action.card;
-			return {
-				...state,
+		case ADD_CARDS:
+			return action.cards.reduce((newState, card) => ({
+				...newState,
 				[card.idList]: [
-					...(state[card.idList] || []),
+					...(newState[card.idList] || []),
 					card,
 				],
-			};
+			}), state);
 		default:
 			return state;
 	}
 };
 
-export default function(state = {}, action) {
-	const newState = {
-		lists: lists(state.lists, action),
-		cardsByList: cardsByList(state.cardsByList, action),
-	};
-	return {
-		...newState,
-		listsWithCards: newState.lists.map((list) => {
+const openedPopup = (state = {}, action) => {
+	switch (action.type) {
+		case OPEN_POPUP:
 			return {
-				...list,
-				cards: newState.cardsByList[list.id] || [],
+				anchor: action.domAnchor,
+				popupKey: action.popupKey,
 			};
-		}),
-	};
+		case CLOSE_POPUP:
+			return {};
+		default:
+			return state;
+	}
 };
+
+const listsById = (state = {}, action) => {
+	switch (action.type) {
+		case ADD_LISTS:
+			return action.lists.reduce((newState, list) => ({
+				...newState,
+				[list.id]: list,
+			}), state);
+		default:
+			return state;
+	}
+};
+
+const cardsById = (state = {}, action) => {
+	switch (action.type) {
+		case ADD_CARDS:
+			return action.cards.reduce((newState, card) => ({
+				...newState,
+				[card.id]: card,
+			}), state);
+		case ADD_LABEL:
+			return update(state, {
+				[action.cardId]: {
+					idLabels:{
+						$push: [ action.labelId ],
+					},
+				},
+			});
+		case REMOVE_LABEL:
+			return update(state, {
+				[action.cardId]: {
+					idLabels:{
+						$splice: [[ state[action.cardId].idLabels.indexOf(action.labelId), 1 ]],
+					},
+				},
+			});
+		default:
+			return state;
+	}
+};
+
+const cardsIdByListId = (state = {}, action) => {
+	switch (action.type) {
+		case ADD_CARDS:
+			return action.cards.reduce((newState, card) => ({
+				...newState,
+				[card.idList]: [
+					...(newState[card.idList] || []),
+					card.id,
+				],
+			}), state);
+		default:
+			return state;
+	}
+};
+
+export default combineReducers({
+	listsById,
+	cardsById,
+	cardsIdByListId,
+	openedPopup: openedPopup,
+	labels: (state = {}) => state,
+});
+
+// export default function(state = {}, action) {
+// 	const newState = {
+// 		lists: lists(state.lists, action),
+// 		labels: labels(state.labels, action),
+// 		cardsByList: cardsByList(state.cardsByList, action),
+// 		openedPopup: openedPopup(state.openedPopup, action),
+// 	};
+// 	return {
+// 		...newState,
+// 		listsWithCards: newState.lists.map((list) => {
+// 			return {
+// 				...list,
+// 				cards: newState.cardsByList[list.id] || [],
+// 			};
+// 		}),
+// 	};
+// };

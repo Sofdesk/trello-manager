@@ -4,7 +4,7 @@ import {Card, CardHeader, CardText} from 'material-ui/Card';
 import {List} from 'material-ui/List';
 import {default as ListCard} from './Card.jsx';
 
-export default function App({ list }) {
+export default function App({ list, cards, labels }) {
 	return (
 		<Card>
 			<CardHeader
@@ -14,7 +14,7 @@ export default function App({ list }) {
 			/>
 			<CardText expandable={true}>
 				<List>
-					{ list.cards.map((card) => (<ListCard key={card.id} card={card} />)) }
+					{ cards.map((card) => (<ListCard key={card.id} card={card} labels={labels} />)) }
 				</List>
 			</CardText>
 		</Card>
