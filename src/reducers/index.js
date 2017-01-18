@@ -2,7 +2,7 @@
 import { combineReducers } from 'redux';
 import update from 'react-addons-update';
 
-import { ADD_LISTS, ADD_CARDS, ADD_LABELS, OPEN_POPUP, CLOSE_POPUP, ADD_LABEL, REMOVE_LABEL } from '../actions';
+import { ADD_LISTS, ADD_CARDS, ADD_LABELS, OPEN_POPUP, CLOSE_POPUP, ADD_LABEL, REMOVE_LABEL, SORT_LABELS } from '../actions';
 
 export function lists(state = [], action) {
 	switch (action.type) {
@@ -35,21 +35,6 @@ export function labels(state = [], action) {
 				...state,
 				...action.labels,
 			];
-		default:
-			return state;
-	}
-};
-
-const cardsByList = (state = {}, action) => {
-	switch (action.type) {
-		case ADD_CARDS:
-			return action.cards.reduce((newState, card) => ({
-				...newState,
-				[card.idList]: [
-					...(newState[card.idList] || []),
-					card,
-				],
-			}), state);
 		default:
 			return state;
 	}
@@ -124,28 +109,20 @@ const cardsIdByListId = (state = {}, action) => {
 	}
 };
 
+const sortedLabelIds = (state = [], action) => {
+	switch (action.type) {
+		case SORT_LABELS:
+			return action.sortedLabelIds;
+		default:
+			return state;
+	}
+}
+
 export default combineReducers({
 	listsById,
 	cardsById,
 	cardsIdByListId,
+	sortedLabelIds,
 	openedPopup: openedPopup,
 	labels: (state = {}) => state,
 });
-
-// export default function(state = {}, action) {
-// 	const newState = {
-// 		lists: lists(state.lists, action),
-// 		labels: labels(state.labels, action),
-// 		cardsByList: cardsByList(state.cardsByList, action),
-// 		openedPopup: openedPopup(state.openedPopup, action),
-// 	};
-// 	return {
-// 		...newState,
-// 		listsWithCards: newState.lists.map((list) => {
-// 			return {
-// 				...list,
-// 				cards: newState.cardsByList[list.id] || [],
-// 			};
-// 		}),
-// 	};
-// };

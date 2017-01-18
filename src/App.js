@@ -5,7 +5,7 @@ injectTapEventPlugin();
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 
-import { fetchLists, fetchCards, fetchLabels } from './actions';
+import { fetchLists, fetchCards, fetchLabels, sortLabels } from './actions';
 import Lists from './components/Lists.jsx';
 
 import logo from './logo.svg';
@@ -20,6 +20,11 @@ class App extends Component {
     this.props.dispatch(fetchCards('zW2QPWTu'));
     this.props.dispatch(fetchLabels('zW2QPWTu'));
   }
+  handleSort(labelType, event) {
+    event.preventDefault();
+    const newLabelIds = this.props.labels[labelType].map((label) => label.id);
+    this.props.dispatch(sortLabels(this.props.sortedLabelIds, newLabelIds));
+  }
 
   render() {
     return (
@@ -32,25 +37,25 @@ class App extends Component {
         </div>
         <div style={{ padding:26 }}>
           <RaisedButton
-            // onTouchTap={handleTouchTap}
+            onTouchTap={this.handleSort.bind(this, 'lennieLabels')}
             label="Lennie"
             style={{ width:150, marginRight:10, height:28, lineHeight:'28px' }}
             backgroundColor={colors.amber500}
           />
           <RaisedButton
-            // onTouchTap={handleTouchTap}
+            onTouchTap={this.handleSort.bind(this, 'emilyLabels')}
             label="Emily"
             style={{ width:150, marginRight:10, height:28, lineHeight:'28px' }}
             backgroundColor={colors.amber500}
           />
           <RaisedButton
-            // onTouchTap={handleTouchTap}
+            onTouchTap={this.handleSort.bind(this, 'devLabels')}
             label="Dev team"
             style={{ width:150, marginRight:10, height:28, lineHeight:'28px' }}
             backgroundColor={colors.amber500}
           />
           <RaisedButton
-            // onTouchTap={handleTouchTap}
+            onTouchTap={this.handleSort.bind(this, 'statusLabels')}
             label="Status"
             style={{ width:150, marginRight:10, height:28, lineHeight:'28px' }}
             backgroundColor={colors.amber500}
@@ -61,17 +66,19 @@ class App extends Component {
           cardsById={this.props.cardsById}
           cardsIdByListId={this.props.cardsIdByListId}
           labels={this.props.labels}
+          sortedLabelIds={this.props.sortedLabelIds}
         />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state = { listsById:{}, cardsById:{}, cardsIdByListId:{} }) => {
+const mapStateToProps = (state = { listsById:{}, cardsById:{}, cardsIdByListId:{}, sortedLabelIds:[] }) => {
   return {
     listsById: state.listsById,
     cardsById: state.cardsById,
     cardsIdByListId: state.cardsIdByListId,
+    sortedLabelIds: state.sortedLabelIds,
     labels: state.labels,
   };
 };

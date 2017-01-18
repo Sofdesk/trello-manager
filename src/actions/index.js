@@ -1,4 +1,6 @@
 
+import { difference } from 'lodash';
+
 export const ADD_LISTS = 'ADD_LISTS';
 export const ADD_CARDS = 'ADD_CARDS';
 export const ADD_LABELS = 'ADD_LABELS';
@@ -7,6 +9,7 @@ export const REMOVE_PRIORITY = 'REMOVE_PRIORITY';
 export const CLOSE_POPUP = 'CLOSE_POPUP';
 export const ADD_LABEL = 'ADD_LABEL';
 export const REMOVE_LABEL = 'REMOVE_LABEL';
+export const SORT_LABELS = 'SORT_LABELS';
 
 export function addLists(lists) {
 	return {
@@ -40,7 +43,7 @@ export function fetchLists(boardId) {
 export function fetchCards(boardId) {
 	return (dispatch) => {
 		window.Trello.get(`boards/${boardId}/cards`,
-	    	(cards) => dispatch(addCards(cards)),
+	    	(cards) => dispatch(addCards(cards.sort((a, b) => a.pos - b.pos))),
 	    	(error) => console.log(error));
 	};
 };
@@ -87,4 +90,14 @@ export function removeLabel(cardId, labelId) {
     		}),
 	    	(error) => console.log(error));
 	}
+};
+
+export function sortLabels(oldLabelIds, newLabelIds) {
+	const sortedLabelIds = difference(oldLabelIds, newLabelIds);
+	sortedLabelIds.splice(0, 0, ...newLabelIds);
+
+	return {
+		type: SORT_LABELS,
+		sortedLabelIds,
+	};
 };

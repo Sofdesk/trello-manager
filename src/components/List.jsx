@@ -1,10 +1,13 @@
 
 import React from 'react';
+import { connect } from 'react-redux'
+import makeSortedCards from '../selectors/makeSortedCards.js'
+
 import {Card, CardHeader, CardText} from 'material-ui/Card';
 import {List} from 'material-ui/List';
 import {default as ListCard} from './Card.jsx';
 
-export default function App({ list, cards, labels }) {
+const MyList = ({ list, cards, labels }) => {
 	return (
 		<Card>
 			<CardHeader
@@ -20,3 +23,19 @@ export default function App({ list, cards, labels }) {
 		</Card>
 	);
 };
+
+const makeMapStateToProps = () => {
+  const getSortedCards = makeSortedCards()
+  const mapStateToProps = (state, props) => {
+    return {
+      cards: getSortedCards(state, props),
+    };
+  };
+  return mapStateToProps;
+};
+
+const MySortedList = connect(
+  makeMapStateToProps()
+)(MyList);
+
+export default MySortedList;
