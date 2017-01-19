@@ -24,15 +24,21 @@ const LabelBadge = ({ labelIds, style }) => {
 	);
 };
 
-export default function Card({ card, labels }) {
-	return (
-		<div style={{ padding:10, borderBottom:'1px solid #ccc', display:'flex', alignItems:'center' }}>
-			<Labels card={card} options={labels.lennieLabels} type="lennie" style={{ flex:'0 1 auto' }} />
-			<Labels card={card} options={labels.emilyLabels} type="emily" style={{ flex:'0 1 auto' }} />
-			<Labels card={card} options={labels.devLabels} type="dev" style={{ flex:'0 1 auto' }} />
-			<Labels card={card} options={labels.statusLabels} type="status" style={{ flex:'0 1 auto' }} />
-			<LabelBadge labelIds={card.idLabels} />
-			<div style={{ flex:'0 1 auto' }}><a href={card.shortUrl} target="_blank">{card.name}</a></div>
-		</div>
-	);
-};
+class Card extends React.PureComponent {
+	render() {
+		const { card, labels } = this.props;
+
+		return (
+			<div style={{ padding:10, borderBottom:'1px solid #ccc', display:'flex', alignItems:'center' }}>
+				<Labels card={card} options={labels.lennieLabels} type="lennie" style={{ flex:'0 1 auto' }} />
+				<Labels card={card} options={labels.emilyLabels} type="emily" style={{ flex:'0 1 auto' }} />
+				<Labels card={card} options={labels.devLabels} type="dev" style={{ flex:'0 1 auto' }} />
+				<Labels card={card} options={labels.statusLabels} type="status" style={{ flex:'0 1 auto' }} />
+				<LabelBadge labelIds={card.idLabels} />
+				<div style={{ flex:'0 1 auto' }}><a href={card.shortUrl} target="_blank">{card.name}</a></div>
+			</div>
+		);
+	}
+}
+
+export default Card;

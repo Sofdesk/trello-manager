@@ -13,6 +13,10 @@ Trello.authorize({
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import Perf from 'react-addons-perf'
+window.Perf = Perf;
+
 import App from './App';
 import './index.css';
 
