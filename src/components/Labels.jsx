@@ -20,7 +20,7 @@ class Labels extends Component {
 			nextProps.popupOpened !== this.props.popupOpened;
 	}
 	render() {
-		const { card, options, type, style, popupOpened, popupKey, openedPopupAnchor, dispatch } = this.props;
+		const { card, options, style, popupOpened, popupKey, openedPopupAnchor, dispatch } = this.props;
 
 		const allOptions = [...options, notSet];
 		const possibleOptions = allOptions.filter((option) => card.idLabels.includes(option.id));
@@ -89,11 +89,11 @@ class Labels extends Component {
 
 const mapStateToProps = (state = {}, props) => {
 	const popupKey = props.type + props.card.id;
-  return {
-  	popupKey,
-    popupOpened: popupKey === state.openedPopup.popupKey,
-    openedPopupAnchor: state.openedPopup.anchor,
-  };
+	return {
+		popupKey,
+		popupOpened: popupKey === state.openedPopup.popupKey,
+		openedPopupAnchor: state.openedPopup.anchor,
+	};
 };
 
 export default connect(mapStateToProps)(Labels);

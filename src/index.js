@@ -14,8 +14,9 @@ Trello.authorize({
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Perf from 'react-addons-perf'
-window.Perf = Perf;
+if (process.env.NODE_ENV !== 'production') {
+  window.Perf = require('react-addons-perf');
+}
 
 import App from './App';
 import './index.css';
