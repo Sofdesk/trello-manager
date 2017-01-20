@@ -22,8 +22,19 @@ class App extends Component {
   }
   handleSort(labelType, event) {
     event.preventDefault();
-    const newLabelIds = this.props.labels[labelType].map((label) => label.id);
-    this.props.dispatch(sortLabels(this.props.sortedLabelIds, newLabelIds));
+    if (labelType) {
+      const newLabelIds = this.props.labels[labelType].map((label) => label.id);
+      this.props.dispatch(sortLabels(this.props.sortedLabelIds, newLabelIds));
+    }
+    else {
+      // clear
+      this.props.dispatch(sortLabels([], []));
+    }
+  }
+  handleSave = (event) => {
+    event.preventDefault();
+    console.log('Sorry, Redux sucks...');
+    // this.props.dispatch(saveCardOrder(this.props.sortedLabelIds, newLabelIds));
   }
 
   render() {
@@ -59,6 +70,24 @@ class App extends Component {
             label="Status"
             style={{ width:150, marginRight:10, height:28, lineHeight:'28px' }}
             backgroundColor={colors.amber500}
+          />
+          <RaisedButton
+            onTouchTap={() => console.log('nope')}
+            label="Effort"
+            style={{ width:100, marginRight:10, height:28, lineHeight:'28px' }}
+            backgroundColor={colors.amber500}
+          />
+          <RaisedButton
+            onTouchTap={this.handleSort.bind(this, '')}
+            label="Clear sort"
+            style={{ marginRight:10, height:28, lineHeight:'28px', float:'right' }}
+            backgroundColor={colors.amber200}
+          />
+          <RaisedButton
+            onTouchTap={this.handleSave}
+            label="Save sort"
+            style={{ marginRight:10, height:28, lineHeight:'28px', float:'right' }}
+            backgroundColor={colors.lightBlue200}
           />
         </div>
         <Lists

@@ -2,43 +2,7 @@
 import { combineReducers } from 'redux';
 import update from 'react-addons-update';
 
-import { ADD_LISTS, ADD_CARDS, ADD_LABELS, OPEN_POPUP, CLOSE_POPUP, ADD_LABEL, REMOVE_LABEL, SORT_LABELS } from '../actions';
-
-export function lists(state = [], action) {
-	switch (action.type) {
-		case ADD_LISTS:
-			return [
-				...state,
-				...action.lists,
-			];
-		default:
-			return state;
-	}
-};
-
-export function cards(state = [], action) {
-	switch (action.type) {
-		case ADD_CARDS:
-			return [
-				...state,
-				...action.cards,
-			];
-		default:
-			return state;
-	}
-};
-
-export function labels(state = [], action) {
-	switch (action.type) {
-		case ADD_LABELS:
-			return [
-				...state,
-				...action.labels,
-			];
-		default:
-			return state;
-	}
-};
+import { ADD_LISTS, ADD_CARDS, OPEN_POPUP, CLOSE_POPUP, ADD_LABEL, REMOVE_LABEL, SORT_LABELS } from '../actions';
 
 const openedPopup = (state = {}, action) => {
 	switch (action.type) {
@@ -100,7 +64,9 @@ const cardsIdByListId = (state = {}, action) => {
 			return action.cards.reduce((newState, card) => ({
 				...newState,
 				[card.idList]: [
-					...(newState[card.idList] || []),
+					// prepend the current list of ids,
+					// and remove the added card.id if already in the list (update it)
+					...(newState[card.idList] || []).filter((id) => id !== card.id),
 					card.id,
 				],
 			}), state);

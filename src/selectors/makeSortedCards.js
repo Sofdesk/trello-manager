@@ -12,10 +12,10 @@ const makeSortedCards = () => {
     [ getSortedLabelIds, getCardIds, getCards ],
     (sortedLabelIds, cardIds, cardsById) => {
     	const cardOrdering = cardIds.map((cardId) => cardsById[cardId].idLabels
-														.map((labelId) => sortedLabelIds.indexOf(labelId))	// return ordering position of each label
+											    		.map((labelId) => sortedLabelIds.indexOf(labelId))	// return ordering position of each label
 														.filter((index) => index !== -1)	// remove unknown/unsorted labels
 														.sort()
-													);
+    									);
 
     	const sortedCardIds = [...cardIds].sort((cardA, cardB) => {
     		const cardAindex = cardIds.indexOf(cardA);
@@ -40,7 +40,7 @@ const makeSortedCards = () => {
     			}
     			i++;
     		}
-    		return result;
+    		return result === 0 ? cardsById[cardA].pos - cardsById[cardB].pos : result;
     	});
 
     	const cards = sortedCardIds.map((cardId) => cardsById[cardId]);

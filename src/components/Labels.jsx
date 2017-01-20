@@ -5,7 +5,7 @@ import { isEqual } from 'lodash';
 import LeftIcon from 'material-ui/svg-icons/action/bookmark';
 import * as colors from 'material-ui/styles/colors';
 
-import { openPopup, addLabel, removeLabel, closePopup } from '../actions'
+import { openPopup, closePopup } from '../actions';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
@@ -16,14 +16,15 @@ const notSet = { name: 'Not set', color:colors.grey500 };
 
 class Labels extends Component {
 	shouldComponentUpdate(nextProps, nextState) {
-		return !isEqual(nextProps.card, this.props.card) ||
+		return !isEqual(nextProps.selectedLabels, this.props.selectedLabels) ||
+			nextProps.cardId !== this.props.cardId ||
 			nextProps.popupOpened !== this.props.popupOpened;
 	}
 	render() {
-		const { card, options, style, popupOpened, popupKey, openedPopupAnchor, dispatch } = this.props;
+		const { selectedLabels, options, style, popupOpened, popupKey, openedPopupAnchor, onLabelChange, dispatch } = this.props;
 
 		const allOptions = [...options, notSet];
-		const possibleOptions = allOptions.filter((option) => card.idLabels.includes(option.id));
+		const possibleOptions = allOptions.filter((option) => selectedLabels.includes(option.id));
 		const selectedOption = possibleOptions.pop() || notSet;
 
 		const handleTouchTap = (event) => {
@@ -32,12 +33,13 @@ class Labels extends Component {
 		};
 		const handleSelect = (option) => {
 			dispatch(closePopup());
-			if (option.id) {
-				dispatch(addLabel(card.id, option.id));
-			}
-			if (selectedOption.id) {
-				dispatch(removeLabel(card.id, selectedOption.id));
-			}
+			onLabelChange(selectedOption.id && selectedOption, option.id && option);
+			// if (option.id) {
+			// 	dispatch(addLabel(cardId, option.id));
+			// }
+			// if (selectedOption.id) {
+			// 	dispatch(removeLabel(cardId, selectedOption.id));
+			// }
 		};
 		const handleCancel = () => {
 			dispatch(closePopup());
@@ -88,7 +90,7 @@ class Labels extends Component {
 };
 
 const mapStateToProps = (state = {}, props) => {
-	const popupKey = props.type + props.card.id;
+	const popupKey = props.type + props.cardId;
 	return {
 		popupKey,
 		popupOpened: popupKey === state.openedPopup.popupKey,

@@ -101,3 +101,15 @@ export function sortLabels(oldLabelIds, newLabelIds) {
 		sortedLabelIds,
 	};
 };
+
+export function editCardName(cardId, newTitle) {
+	return (dispatch) => {
+		window.Trello.put(`cards/${cardId}`,
+			{ name:newTitle },
+	    	(card) => dispatch({
+	    		type: ADD_CARDS,
+	    		cards: [card],
+    		}),
+	    	(error) => console.log(error));
+	}
+};

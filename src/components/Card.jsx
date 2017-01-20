@@ -3,6 +3,8 @@ import React from 'react';
 import * as colors from 'material-ui/styles/colors';
 
 import Labels from './Labels.jsx';
+import { addLabel, removeLabel } from '../actions'
+import Complexity from './Complexity.jsx';
 
 const LabelBadge = ({ labelIds, style }) => {
 	const pulseStyle = {
@@ -25,17 +27,35 @@ const LabelBadge = ({ labelIds, style }) => {
 };
 
 class Card extends React.PureComponent {
+	onLabelChange = (oldOption, newOption) => {
+		if (newOption) {
+			this.props.dispatch(addLabel(this.props.card.id, newOption.id));
+		}
+		if (oldOption) {
+			this.props.dispatch(removeLabel(this.props.card.id, oldOption.id));
+		}
+	}
 	render() {
-		const { card, labels } = this.props;
+		const { card, labels, dispatch } = this.props;
+
+		const labelProps = {
+			cardId: card.id,
+			selectedLabels: card.idLabels,
+			onLabelChange: this.onLabelChange,
+			style: {
+				flex:'0 1 auto',
+			},
+		};
 
 		return (
 			<div style={{ padding:10, borderBottom:'1px solid #ccc', display:'flex', alignItems:'center' }}>
-				<Labels card={card} options={labels.lennieLabels} type="lennie" style={{ flex:'0 1 auto' }} />
-				<Labels card={card} options={labels.emilyLabels} type="emily" style={{ flex:'0 1 auto' }} />
-				<Labels card={card} options={labels.devLabels} type="dev" style={{ flex:'0 1 auto' }} />
-				<Labels card={card} options={labels.statusLabels} type="status" style={{ flex:'0 1 auto' }} />
+				<Labels { ...labelProps } type="lennie" options={labels.lennieLabels} />
+				<Labels { ...labelProps } type="emily" options={labels.emilyLabels} />
+				<Labels { ...labelProps } type="dev" options={labels.devLabels} />
+				<Labels { ...labelProps } type="status" options={labels.statusLabels} />
+				<Complexity card={card} dispatch={dispatch} />
 				<LabelBadge labelIds={card.idLabels} />
-				<div style={{ flex:'0 1 auto' }}><a href={card.shortUrl} target="_blank">{card.name}</a></div>
+				<div style={{ flex:'0 1 auto' }}><a href={card.shortUrl} target="_blank">{card.name.replace(/^\((\d+)\)/, '')}</a></div>
 			</div>
 		);
 	}

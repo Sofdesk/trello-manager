@@ -7,7 +7,7 @@ import {Card, CardHeader, CardText} from 'material-ui/Card';
 import {List} from 'material-ui/List';
 import {default as ListCard} from './Card.jsx';
 
-const MyList = ({ list, cards, labels }) => {
+const MyList = ({ list, cards, labels, dispatch }) => {
 	return (
 		<Card>
 			<CardHeader
@@ -17,7 +17,7 @@ const MyList = ({ list, cards, labels }) => {
 			/>
 			<CardText expandable={true}>
 				<List>
-					{ cards.map((card) => (<ListCard key={card.id} card={card} labels={labels} />)) }
+					{ cards.map((card) => (<ListCard key={card.id} card={card} labels={labels} dispatch={dispatch} />)) }
 				</List>
 			</CardText>
 		</Card>
