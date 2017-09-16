@@ -48,20 +48,20 @@ class App extends Component {
         </div>
         <div style={{ padding:26 }}>
           <RaisedButton
-            onTouchTap={this.handleSort.bind(this, 'lennieLabels')}
-            label="Lennie"
-            style={{ width:150, marginRight:10, height:28, lineHeight:'28px' }}
-            backgroundColor={colors.amber500}
-          />
-          <RaisedButton
-            onTouchTap={this.handleSort.bind(this, 'emilyLabels')}
-            label="Emily"
+            onTouchTap={this.handleSort.bind(this, 'salesLabels')}
+            label="Sales Team"
             style={{ width:150, marginRight:10, height:28, lineHeight:'28px' }}
             backgroundColor={colors.amber500}
           />
           <RaisedButton
             onTouchTap={this.handleSort.bind(this, 'devLabels')}
             label="Dev team"
+            style={{ width:150, marginRight:10, height:28, lineHeight:'28px' }}
+            backgroundColor={colors.amber500}
+          />
+          <RaisedButton
+            onTouchTap={this.handleSort.bind(this, 'devLabels')}
+            label="Customers"
             style={{ width:150, marginRight:10, height:28, lineHeight:'28px' }}
             backgroundColor={colors.amber500}
           />
@@ -77,6 +77,13 @@ class App extends Component {
             style={{ width:100, marginRight:10, height:28, lineHeight:'28px' }}
             backgroundColor={colors.amber500}
           />
+          {/*
+          <RaisedButton
+            onTouchTap={this.handleSort.bind(this, 'lennieLabels')}
+            label="Lennie"
+            style={{ width:150, marginRight:10, height:28, lineHeight:'28px' }}
+            backgroundColor={colors.amber500}
+          />
           <RaisedButton
             onTouchTap={this.handleSort.bind(this, '')}
             label="Clear sort"
@@ -89,6 +96,7 @@ class App extends Component {
             style={{ marginRight:10, height:28, lineHeight:'28px', float:'right' }}
             backgroundColor={colors.lightBlue200}
           />
+          */}
         </div>
         <Lists
           listsById={this.props.listsById}

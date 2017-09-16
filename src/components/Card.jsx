@@ -49,9 +49,9 @@ class Card extends React.PureComponent {
 
 		return (
 			<div style={{ padding:10, borderBottom:'1px solid #ccc', display:'flex', alignItems:'center' }}>
-				<Labels { ...labelProps } type="lennie" options={labels.lennieLabels} />
-				<Labels { ...labelProps } type="emily" options={labels.emilyLabels} />
+				<Labels { ...labelProps } type="sales" options={labels.salesLabels} />
 				<Labels { ...labelProps } type="dev" options={labels.devLabels} />
+				<Labels { ...labelProps } type="customer" options={labels.customerLabels} />
 				<Labels { ...labelProps } type="status" options={labels.statusLabels} />
 				<Complexity card={card} dispatch={dispatch} />
 				<LabelBadge labelIds={card.idLabels} />
