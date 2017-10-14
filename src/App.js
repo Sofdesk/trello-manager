@@ -60,7 +60,7 @@ class App extends Component {
             backgroundColor={colors.amber500}
           />
           <RaisedButton
-            onTouchTap={this.handleSort.bind(this, 'devLabels')}
+            onTouchTap={this.handleSort.bind(this, 'customerLabels')}
             label="Customers"
             style={{ width:150, marginRight:10, height:28, lineHeight:'28px' }}
             backgroundColor={colors.amber500}
